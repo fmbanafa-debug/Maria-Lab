@@ -1,0 +1,245 @@
+```react
+import React, { useState } from 'react';
+import { 
+  Activity, Sun, ShieldCheck, Droplet, 
+  ChevronDown, ChevronUp, AlertCircle, 
+  Apple, Fish, Egg, Milk, Info
+} from 'lucide-react';
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState('labs');
+  const [expandedCard, setExpandedCard] = useState(null);
+
+  const toggleCard = (id) => {
+    setExpandedCard(expandedCard === id ? null : id);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 pb-12">
+      {/* Header */}
+      <header className="bg-gradient-to-r from-sky-400 to-indigo-500 text-white p-6 shadow-md rounded-b-[2rem]">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 className="text-3xl font-extrabold tracking-tight mb-2">Maria's Health Dashboard</h1>
+          <p className="text-sky-100 font-medium">A visual guide to your recent lab results & superpower foods!</p>
+        </div>
+      </header>
+
+      {/* Navigation Tabs */}
+      <div className="flex justify-center mt-6 space-x-4 px-4">
+        <button 
+          onClick={() => setActiveTab('labs')}
+          className={`px-6 py-3 rounded-full font-bold transition-all shadow-sm ${activeTab === 'labs' ? 'bg-sky-500 text-white shadow-sky-200' : 'bg-white text-slate-500 hover:bg-sky-50'}`}
+        >
+          🔬 My Lab Results
+        </button>
+        <button 
+          onClick={() => setActiveTab('foods')}
+          className={`px-6 py-3 rounded-full font-bold transition-all shadow-sm ${activeTab === 'foods' ? 'bg-green-500 text-white shadow-green-200' : 'bg-white text-slate-500 hover:bg-green-50'}`}
+        >
+          🥑 Superhero Foods
+        </button>
+      </div>
+
+      <main className="max-w-3xl mx-auto mt-8 px-4">
+        {activeTab === 'labs' && (
+          <div className="space-y-6 animate-fade-in-up">
+            
+            {/* Disclaimer */}
+            <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-xl flex items-start gap-3 text-sm">
+              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-yellow-600" />
+              <p><strong>Note for Mom:</strong> This dashboard is an educational tool based on Maria's reports (May 2026) to help you understand her results before your doctor's appointment.</p>
+            </div>
+
+            {/* Blood Factory (CBC & Iron) */}
+            <LabCard 
+              id="blood"
+              title="The Blood Factory"
+              icon={<Droplet className="w-8 h-8 text-red-500" />}
+              status="Special Trait"
+              statusColor="bg-purple-100 text-purple-700"
+              isExpanded={expandedCard === 'blood'}
+              onToggle={() => toggleCard('blood')}
+              summary="Maria has lots of red blood cells, but they are smaller than average. Her iron levels are perfect!"
+            >
+              <div className="space-y-4 text-sm mt-4">
+                <p><strong>The Story:</strong> Red blood cells are like tiny delivery trucks carrying oxygen. Maria's body makes extra trucks (High RBC: 5.74), but they are a bit mini-sized (Low MCV: 67.8).</p>
+                <div className="p-3 bg-red-50 rounded-lg border border-red-100">
+                  <p className="font-bold text-red-800 mb-1">Diagnosis Clue: Alpha Thalassemia Trait</p>
+                  <p>Because her Iron levels are <strong>100% normal</strong> (Ferritin: 28) and her Hemoglobin Electrophoresis is <strong>normal</strong>, this points to a harmless genetic carrier trait called Alpha Thalassemia Minor.</p>
+                </div>
+                <div className="flex items-center gap-2 text-indigo-700 bg-indigo-50 p-3 rounded-lg">
+                  <Info className="w-5 h-5 flex-shrink-0" />
+                  <p><strong>Action:</strong> No need for extra iron pills! Just eat a balanced diet. She is healthy and this trait just means her baseline hemoglobin will always be slightly lower.</p>
+                </div>
+              </div>
+            </LabCard>
+
+            {/* Sunshine Battery (Vitamin D) */}
+            <LabCard 
+              id="vitd"
+              title="The Sunshine Battery (Vitamin D)"
+              icon={<Sun className="w-8 h-8 text-yellow-500" />}
+              status="Needs Recharging"
+              statusColor="bg-yellow-100 text-yellow-700"
+              isExpanded={expandedCard === 'vitd'}
+              onToggle={() => toggleCard('vitd')}
+              summary="Maria's Vitamin D level is slightly low at 19.3 ng/mL. The goal is 30+!"
+            >
+              <div className="space-y-4 mt-4">
+                {/* Progress Bar */}
+                <div>
+                  <div className="flex justify-between text-xs font-bold text-slate-500 mb-1">
+                    <span>Empty</span>
+                    <span className="text-yellow-600">Current: 19.3</span>
+                    <span>Goal: 30+</span>
+                  </div>
+                  <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden relative">
+                    <div className="bg-yellow-400 h-4 rounded-full transition-all duration-1000" style={{ width: '40%' }}></div>
+                    {/* Goal Marker */}
+                    <div className="absolute top-0 bottom-0 left-[60%] border-l-2 border-slate-600 z-10 border-dashed"></div>
+                  </div>
+                </div>
+                <p className="text-sm"><strong>Why it matters:</strong> Vitamin D is the key that unlocks calcium to build super strong bones and keep the immune system fighting off bugs.</p>
+                <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 p-3 rounded-lg text-sm">
+                  <Info className="w-5 h-5 flex-shrink-0" />
+                  <p><strong>Action:</strong> Ask the pediatrician for a daily Vitamin D drop/gummy dose. Play in the morning sun for 15 minutes, and check the Foods tab!</p>
+                </div>
+              </div>
+            </LabCard>
+
+            {/* The Engine Room (Metabolic) */}
+            <LabCard 
+              id="metabolic"
+              title="The Engine Room (General Health)"
+              icon={<ShieldCheck className="w-8 h-8 text-green-500" />}
+              status="Perfect!"
+              statusColor="bg-green-100 text-green-700"
+              isExpanded={expandedCard === 'metabolic'}
+              onToggle={() => toggleCard('metabolic')}
+              summary="Kidneys, Liver, Thyroid, and Blood Sugar are all running smoothly."
+            >
+              <div className="grid grid-cols-2 gap-3 mt-4 text-sm">
+                <div className="bg-white border border-slate-200 p-3 rounded-lg shadow-sm">
+                  <div className="font-bold text-slate-700">Thyroid</div>
+                  <div className="text-green-600 font-medium">Normal</div>
+                </div>
+                <div className="bg-white border border-slate-200 p-3 rounded-lg shadow-sm">
+                  <div className="font-bold text-slate-700">Blood Sugar</div>
+                  <div className="text-green-600 font-medium">Perfect (5.5%)</div>
+                </div>
+                <div className="bg-white border border-slate-200 p-3 rounded-lg shadow-sm">
+                  <div className="font-bold text-slate-700">Liver/Kidneys</div>
+                  <div className="text-green-600 font-medium">Healthy</div>
+                </div>
+                <div className="bg-white border border-slate-200 p-3 rounded-lg shadow-sm">
+                  <div className="font-bold text-slate-700">Inflammation</div>
+                  <div className="text-green-600 font-medium">Zero (CRP 0.08)</div>
+                </div>
+              </div>
+            </LabCard>
+
+          </div>
+        )}
+
+        {activeTab === 'foods' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up">
+            
+            {/* Vitamin D Foods */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-yellow-100 p-3 rounded-full"><Sun className="text-yellow-600" /></div>
+                <h3 className="text-xl font-bold text-slate-800">Sunshine Foods</h3>
+              </div>
+              <p className="text-sm text-slate-600 mb-4">Because Maria's Vitamin D is a bit low, adding these foods to her diet will help supplement her drops.</p>
+              
+              <ul className="space-y-3">
+                <FoodItem icon={<Fish className="text-blue-500" />} name="Salmon & Tuna" desc="Packed with natural Vitamin D" />
+                <FoodItem icon={<Egg className="text-yellow-600" />} name="Egg Yolks" desc="A great breakfast boost" />
+                <FoodItem icon={<Milk className="text-sky-400" />} name="Fortified Milk & Yogurt" desc="Check the label for added Vit D" />
+              </ul>
+            </div>
+
+            {/* Blood Health Foods */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-red-100 p-3 rounded-full"><Activity className="text-red-600" /></div>
+                <h3 className="text-xl font-bold text-slate-800">Blood Builders</h3>
+              </div>
+              <p className="text-sm text-slate-600 mb-4">Since Maria has Thalassemia Trait, her body makes cells rapidly. She needs <strong>Folate & B-Vitamins</strong> (not extra iron) to support cell creation!</p>
+              
+              <ul className="space-y-3">
+                <FoodItem icon={<span className="text-2xl">🥬</span>} name="Leafy Greens" desc="Spinach, kale, and broccoli (Rich in Folate)" />
+                <FoodItem icon={<span className="text-2xl">🥜</span>} name="Nuts & Seeds" desc="Great energy and minerals" />
+                <FoodItem icon={<span className="text-2xl">🍊</span>} name="Citrus Fruits" desc="Oranges help absorb nutrients efficiently" />
+              </ul>
+            </div>
+
+          </div>
+        )}
+      </main>
+
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+          animation: fadeInUp 0.4s ease-out forwards;
+        }
+      `}} />
+    </div>
+  );
+}
+
+// Reusable component for Lab Results Cards
+function LabCard({ title, icon, status, statusColor, summary, children, isExpanded, onToggle }) {
+  return (
+    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md">
+      <div 
+        className="p-5 cursor-pointer flex items-center justify-between select-none"
+        onClick={onToggle}
+      >
+        <div className="flex items-center gap-4">
+          <div className="bg-slate-50 p-3 rounded-full shadow-inner">
+            {icon}
+          </div>
+          <div>
+            <h2 className="font-bold text-lg text-slate-800">{title}</h2>
+            <p className="text-sm text-slate-500 mt-0.5 line-clamp-1">{summary}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className={`text-xs font-bold px-3 py-1 rounded-full ${statusColor} hidden sm:block`}>
+            {status}
+          </span>
+          {isExpanded ? <ChevronUp className="text-slate-400" /> : <ChevronDown className="text-slate-400" />}
+        </div>
+      </div>
+      
+      {/* Expandable Content */}
+      <div 
+        className={`px-5 overflow-hidden transition-all duration-300 ease-in-out bg-slate-50/50 ${isExpanded ? 'max-h-96 pb-5 border-t border-slate-100 opacity-100' : 'max-h-0 opacity-0'}`}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// Reusable component for Food Items
+function FoodItem({ icon, name, desc }) {
+  return (
+    <li className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+      <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white rounded-lg shadow-sm">
+        {icon}
+      </div>
+      <div>
+        <p className="font-bold text-slate-700 text-sm">{name}</p>
+        <p className="text-xs text-slate-500">{desc}</p>
+      </div>
+    </li>
+  );
+}
+
+
+```
