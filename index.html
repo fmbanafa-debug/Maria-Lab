@@ -1,245 +1,571 @@
-```react
-import React, { useState } from 'react';
-import { 
-  Activity, Sun, ShieldCheck, Droplet, 
-  ChevronDown, ChevronUp, AlertCircle, 
-  Apple, Fish, Egg, Milk, Info
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maria's Healthy Adventures & Lab Explorer</title>
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for friendly, engaging typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Quicksand:wght@400..700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+        }
+        h1, h2, h3, .font-fun {
+            font-family: 'Fredoka', sans-serif;
+        }
+        /* Custom bouncy animation for our mascots */
+        @keyframes gentle-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-bounce-gentle {
+            animation: gentle-bounce 3s ease-in-out infinite;
+        }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 20s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-sky-100 via-amber-50 to-emerald-100 min-h-screen text-slate-800 pb-16">
 
-export default function App() {
-  const [activeTab, setActiveTab] = useState('labs');
-  const [expandedCard, setExpandedCard] = useState(null);
-
-  const toggleCard = (id) => {
-    setExpandedCard(expandedCard === id ? null : id);
-  };
-
-  return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 pb-12">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-sky-400 to-indigo-500 text-white p-6 shadow-md rounded-b-[2rem]">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-3xl font-extrabold tracking-tight mb-2">Maria's Health Dashboard</h1>
-          <p className="text-sky-100 font-medium">A visual guide to your recent lab results & superpower foods!</p>
-        </div>
-      </header>
-
-      {/* Navigation Tabs */}
-      <div className="flex justify-center mt-6 space-x-4 px-4">
-        <button 
-          onClick={() => setActiveTab('labs')}
-          className={`px-6 py-3 rounded-full font-bold transition-all shadow-sm ${activeTab === 'labs' ? 'bg-sky-500 text-white shadow-sky-200' : 'bg-white text-slate-500 hover:bg-sky-50'}`}
-        >
-          🔬 My Lab Results
-        </button>
-        <button 
-          onClick={() => setActiveTab('foods')}
-          className={`px-6 py-3 rounded-full font-bold transition-all shadow-sm ${activeTab === 'foods' ? 'bg-green-500 text-white shadow-green-200' : 'bg-white text-slate-500 hover:bg-green-50'}`}
-        >
-          🥑 Superhero Foods
-        </button>
-      </div>
-
-      <main className="max-w-3xl mx-auto mt-8 px-4">
-        {activeTab === 'labs' && (
-          <div className="space-y-6 animate-fade-in-up">
-            
-            {/* Disclaimer */}
-            <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-xl flex items-start gap-3 text-sm">
-              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-yellow-600" />
-              <p><strong>Note for Mom:</strong> This dashboard is an educational tool based on Maria's reports (May 2026) to help you understand her results before your doctor's appointment.</p>
-            </div>
-
-            {/* Blood Factory (CBC & Iron) */}
-            <LabCard 
-              id="blood"
-              title="The Blood Factory"
-              icon={<Droplet className="w-8 h-8 text-red-500" />}
-              status="Special Trait"
-              statusColor="bg-purple-100 text-purple-700"
-              isExpanded={expandedCard === 'blood'}
-              onToggle={() => toggleCard('blood')}
-              summary="Maria has lots of red blood cells, but they are smaller than average. Her iron levels are perfect!"
-            >
-              <div className="space-y-4 text-sm mt-4">
-                <p><strong>The Story:</strong> Red blood cells are like tiny delivery trucks carrying oxygen. Maria's body makes extra trucks (High RBC: 5.74), but they are a bit mini-sized (Low MCV: 67.8).</p>
-                <div className="p-3 bg-red-50 rounded-lg border border-red-100">
-                  <p className="font-bold text-red-800 mb-1">Diagnosis Clue: Alpha Thalassemia Trait</p>
-                  <p>Because her Iron levels are <strong>100% normal</strong> (Ferritin: 28) and her Hemoglobin Electrophoresis is <strong>normal</strong>, this points to a harmless genetic carrier trait called Alpha Thalassemia Minor.</p>
-                </div>
-                <div className="flex items-center gap-2 text-indigo-700 bg-indigo-50 p-3 rounded-lg">
-                  <Info className="w-5 h-5 flex-shrink-0" />
-                  <p><strong>Action:</strong> No need for extra iron pills! Just eat a balanced diet. She is healthy and this trait just means her baseline hemoglobin will always be slightly lower.</p>
-                </div>
-              </div>
-            </LabCard>
-
-            {/* Sunshine Battery (Vitamin D) */}
-            <LabCard 
-              id="vitd"
-              title="The Sunshine Battery (Vitamin D)"
-              icon={<Sun className="w-8 h-8 text-yellow-500" />}
-              status="Needs Recharging"
-              statusColor="bg-yellow-100 text-yellow-700"
-              isExpanded={expandedCard === 'vitd'}
-              onToggle={() => toggleCard('vitd')}
-              summary="Maria's Vitamin D level is slightly low at 19.3 ng/mL. The goal is 30+!"
-            >
-              <div className="space-y-4 mt-4">
-                {/* Progress Bar */}
+    <!-- Top Banner -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-sky-100 px-4 py-3 shadow-sm">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-3xl">✨</span>
                 <div>
-                  <div className="flex justify-between text-xs font-bold text-slate-500 mb-1">
-                    <span>Empty</span>
-                    <span className="text-yellow-600">Current: 19.3</span>
-                    <span>Goal: 30+</span>
-                  </div>
-                  <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden relative">
-                    <div className="bg-yellow-400 h-4 rounded-full transition-all duration-1000" style={{ width: '40%' }}></div>
-                    {/* Goal Marker */}
-                    <div className="absolute top-0 bottom-0 left-[60%] border-l-2 border-slate-600 z-10 border-dashed"></div>
-                  </div>
+                    <h1 class="text-xl font-bold text-sky-600 leading-none">Maria's World</h1>
+                    <p class="text-xs text-slate-500">Fun Health & Lab Explorer</p>
                 </div>
-                <p className="text-sm"><strong>Why it matters:</strong> Vitamin D is the key that unlocks calcium to build super strong bones and keep the immune system fighting off bugs.</p>
-                <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 p-3 rounded-lg text-sm">
-                  <Info className="w-5 h-5 flex-shrink-0" />
-                  <p><strong>Action:</strong> Ask the pediatrician for a daily Vitamin D drop/gummy dose. Play in the morning sun for 15 minutes, and check the Foods tab!</p>
-                </div>
-              </div>
-            </LabCard>
+            </div>
+            <!-- Mode Toggle button for Mom -->
+            <button onclick="toggleMomMode()" id="mom-mode-btn" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 text-xs font-bold px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
+                👩‍👧 Mom's Clinical Mode: <span id="mom-mode-status">OFF</span>
+            </button>
+        </div>
+    </header>
 
-            {/* The Engine Room (Metabolic) */}
-            <LabCard 
-              id="metabolic"
-              title="The Engine Room (General Health)"
-              icon={<ShieldCheck className="w-8 h-8 text-green-500" />}
-              status="Perfect!"
-              statusColor="bg-green-100 text-green-700"
-              isExpanded={expandedCard === 'metabolic'}
-              onToggle={() => toggleCard('metabolic')}
-              summary="Kidneys, Liver, Thyroid, and Blood Sugar are all running smoothly."
-            >
-              <div className="grid grid-cols-2 gap-3 mt-4 text-sm">
-                <div className="bg-white border border-slate-200 p-3 rounded-lg shadow-sm">
-                  <div className="font-bold text-slate-700">Thyroid</div>
-                  <div className="text-green-600 font-medium">Normal</div>
-                </div>
-                <div className="bg-white border border-slate-200 p-3 rounded-lg shadow-sm">
-                  <div className="font-bold text-slate-700">Blood Sugar</div>
-                  <div className="text-green-600 font-medium">Perfect (5.5%)</div>
-                </div>
-                <div className="bg-white border border-slate-200 p-3 rounded-lg shadow-sm">
-                  <div className="font-bold text-slate-700">Liver/Kidneys</div>
-                  <div className="text-green-600 font-medium">Healthy</div>
-                </div>
-                <div className="bg-white border border-slate-200 p-3 rounded-lg shadow-sm">
-                  <div className="font-bold text-slate-700">Inflammation</div>
-                  <div className="text-green-600 font-medium">Zero (CRP 0.08)</div>
-                </div>
-              </div>
-            </LabCard>
+    <main class="max-w-md mx-auto px-4 mt-6 space-y-6">
 
-          </div>
-        )}
+        <!-- Tab Selection -->
+        <div class="bg-white/90 p-1.5 rounded-2xl shadow-md flex gap-2">
+            <button onclick="switchTab('adventure')" id="tab-adventure" class="flex-1 py-3 px-2 rounded-xl text-center font-bold text-sm transition-all bg-sky-500 text-white shadow-sm">
+                ☀️ Daily Adventure
+            </button>
+            <button onclick="switchTab('labs')" id="tab-labs" class="flex-1 py-3 px-2 rounded-xl text-center font-bold text-sm transition-all text-slate-600 hover:bg-sky-50">
+                🔬 Lab Secret Codes
+            </button>
+            <button onclick="switchTab('foods')" id="tab-foods" class="flex-1 py-3 px-2 rounded-xl text-center font-bold text-sm transition-all text-slate-600 hover:bg-sky-50">
+                🥑 Superfoods
+            </button>
+        </div>
 
-        {activeTab === 'foods' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up">
+        <!-- ================= ADVENTURE TAB ================= -->
+        <section id="panel-adventure" class="space-y-6">
             
-            {/* Vitamin D Foods */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-yellow-100 p-3 rounded-full"><Sun className="text-yellow-600" /></div>
-                <h3 className="text-xl font-bold text-slate-800">Sunshine Foods</h3>
-              </div>
-              <p className="text-sm text-slate-600 mb-4">Because Maria's Vitamin D is a bit low, adding these foods to her diet will help supplement her drops.</p>
-              
-              <ul className="space-y-3">
-                <FoodItem icon={<Fish className="text-blue-500" />} name="Salmon & Tuna" desc="Packed with natural Vitamin D" />
-                <FoodItem icon={<Egg className="text-yellow-600" />} name="Egg Yolks" desc="A great breakfast boost" />
-                <FoodItem icon={<Milk className="text-sky-400" />} name="Fortified Milk & Yogurt" desc="Check the label for added Vit D" />
-              </ul>
+            <!-- Daily Sun Mascot & Progress Box -->
+            <div class="bg-white rounded-3xl p-6 shadow-lg border border-amber-100 text-center relative overflow-hidden">
+                <!-- Decorative sunbeam background -->
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-yellow-100 rounded-full blur-2xl opacity-60"></div>
+                
+                <div class="relative">
+                    <!-- Interactive Sun Mascot -->
+                    <div class="w-36 h-36 mx-auto cursor-pointer" onclick="tickleSun()">
+                        <svg id="sun-svg" viewBox="0 0 100 100" class="w-full h-full animate-bounce-gentle">
+                            <!-- Rays -->
+                            <g id="sun-rays" class="animate-spin-slow origin-center">
+                                <line x1="50" y1="12" x2="50" y2="2" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" />
+                                <line x1="50" y1="88" x2="50" y2="98" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" />
+                                <line x1="12" y1="50" x2="2" y2="50" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" />
+                                <line x1="88" y1="50" x2="98" y2="50" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" />
+                                <line x1="23" y1="23" x2="16" y2="16" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" />
+                                <line x1="77" y1="77" x2="84" y2="84" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" />
+                                <line x1="23" y1="77" x2="16" y2="84" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" />
+                                <line x1="77" y1="23" x2="84" y2="16" stroke="#F59E0B" stroke-width="5" stroke-linecap="round" />
+                            </g>
+                            <!-- Sun Body -->
+                            <circle cx="50" cy="50" r="30" fill="#FCD34D" stroke="#F59E0B" stroke-width="3" />
+                            
+                            <!-- Sun Faces (Will toggle via JS) -->
+                            <!-- Sleepy Face (0-25%) -->
+                            <g id="face-sleepy">
+                                <path d="M 36 46 Q 41 50 46 46" stroke="#B45309" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                                <path d="M 54 46 Q 59 50 64 46" stroke="#B45309" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                                <path d="M 46 58 Q 50 62 54 58" stroke="#B45309" stroke-width="2" fill="none" stroke-linecap="round" />
+                            </g>
+                            <!-- Happy Face (25-99%) -->
+                            <g id="face-happy" class="hidden">
+                                <circle cx="40" cy="45" r="3.5" fill="#B45309" />
+                                <circle cx="60" cy="45" r="3.5" fill="#B45309" />
+                                <path d="M 42 56 Q 50 64 58 56" stroke="#B45309" stroke-width="3" fill="none" stroke-linecap="round" />
+                                <circle cx="33" cy="52" r="4" fill="#FCA5A5" />
+                                <circle cx="67" cy="52" r="4" fill="#FCA5A5" />
+                            </g>
+                            <!-- Cool Sunglasses Face (100%) -->
+                            <g id="face-cool" class="hidden">
+                                <!-- Sunglasses -->
+                                <path d="M 28 42 L 72 42 L 67 52 L 33 52 Z" fill="#1E293B" />
+                                <rect x="47" y="44" width="6" height="3" fill="#1E293B" />
+                                <path d="M 42 58 Q 50 66 58 58" stroke="#B45309" stroke-width="3" fill="none" stroke-linecap="round" />
+                                <circle cx="31" cy="56" r="3" fill="#FCA5A5" />
+                                <circle cx="69" cy="56" r="3" fill="#FCA5A5" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <h2 id="mascot-speech" class="text-lg font-bold text-slate-700 mt-3">"Yawn... I need your healthy superpower energy to wake up!"</h2>
+                
+                <!-- Adventure Progress Bar -->
+                <div class="mt-4">
+                    <div class="flex justify-between text-xs font-bold text-slate-400 mb-1">
+                        <span>Sleepy Sunny</span>
+                        <span id="progress-percent" class="text-amber-500 font-extrabold">0% Charged</span>
+                        <span>Super Cool Sunny</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-4 border border-slate-200/50 p-0.5 overflow-hidden">
+                        <div id="adventure-progress-bar" class="bg-gradient-to-r from-amber-400 to-orange-500 h-full rounded-full transition-all duration-500" style="width: 5%"></div>
+                    </div>
+                </div>
             </div>
 
-            {/* Blood Health Foods */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-red-100 p-3 rounded-full"><Activity className="text-red-600" /></div>
-                <h3 className="text-xl font-bold text-slate-800">Blood Builders</h3>
-              </div>
-              <p className="text-sm text-slate-600 mb-4">Since Maria has Thalassemia Trait, her body makes cells rapidly. She needs <strong>Folate & B-Vitamins</strong> (not extra iron) to support cell creation!</p>
-              
-              <ul className="space-y-3">
-                <FoodItem icon={<span className="text-2xl">🥬</span>} name="Leafy Greens" desc="Spinach, kale, and broccoli (Rich in Folate)" />
-                <FoodItem icon={<span className="text-2xl">🥜</span>} name="Nuts & Seeds" desc="Great energy and minerals" />
-                <FoodItem icon={<span className="text-2xl">🍊</span>} name="Citrus Fruits" desc="Oranges help absorb nutrients efficiently" />
-              </ul>
+            <!-- Missions Checklists -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-700 flex items-center gap-1.5 px-1">
+                    🎯 Maria's Daily Quests
+                </h3>
+
+                <!-- Quest 1 -->
+                <div onclick="toggleQuest('quest-sun')" class="bg-white border-2 border-amber-200 hover:border-amber-400 p-4 rounded-2xl shadow-sm flex items-start gap-4 cursor-pointer transition-all">
+                    <div class="bg-amber-100 p-2 rounded-xl text-2xl flex-shrink-0">☀️</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-slate-800 text-base flex items-center justify-between">
+                            Morning Sunshine Catching!
+                            <span id="chk-quest-sun" class="w-6 h-6 border-2 border-slate-300 rounded-full flex items-center justify-center text-xs"></span>
+                        </h4>
+                        <p class="text-xs text-slate-500 mt-1">Play or relax outside for 15 minutes. This wakes up your body's bones!</p>
+                    </div>
+                </div>
+
+                <!-- Quest 2 -->
+                <div onclick="toggleQuest('quest-move')" class="bg-white border-2 border-orange-200 hover:border-orange-400 p-4 rounded-2xl shadow-sm flex items-start gap-4 cursor-pointer transition-all">
+                    <div class="bg-orange-100 p-2 rounded-xl text-2xl flex-shrink-0">🏃‍♀️</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-slate-800 text-base flex items-center justify-between">
+                            Active Play or Dance!
+                            <span id="chk-quest-move" class="w-6 h-6 border-2 border-slate-300 rounded-full flex items-center justify-center text-xs"></span>
+                        </h4>
+                        <p class="text-xs text-slate-500 mt-1">Ride a bike, swim, or do a dance-off for 30 minutes to make your heart jump!</p>
+                    </div>
+                </div>
+
+                <!-- Quest 3 -->
+                <div onclick="toggleQuest('quest-superfood')" class="bg-white border-2 border-emerald-200 hover:border-emerald-400 p-4 rounded-2xl shadow-sm flex items-start gap-4 cursor-pointer transition-all">
+                    <div class="bg-emerald-100 p-2 rounded-xl text-2xl flex-shrink-0">🥦</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-slate-800 text-base flex items-center justify-between">
+                            Eat a Super Green or Egg!
+                            <span id="chk-quest-superfood" class="w-6 h-6 border-2 border-slate-300 rounded-full flex items-center justify-center text-xs"></span>
+                        </h4>
+                        <p class="text-xs text-slate-500 mt-1">Eat a serving of green veggies, nuts, or a delicious egg yolk.</p>
+                    </div>
+                </div>
+
+                <!-- Quest 4 -->
+                <div onclick="toggleQuest('quest-water')" class="bg-white border-2 border-sky-200 hover:border-sky-400 p-4 rounded-2xl shadow-sm flex items-start gap-4 cursor-pointer transition-all">
+                    <div class="bg-sky-100 p-2 rounded-xl text-2xl flex-shrink-0">💧</div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-slate-800 text-base flex items-center justify-between">
+                            Water Splash!
+                            <span id="chk-quest-water" class="w-6 h-6 border-2 border-slate-300 rounded-full flex items-center justify-center text-xs"></span>
+                        </h4>
+                        <p class="text-xs text-slate-500 mt-1">Drink water throughout the day to keep your biological systems hydrated.</p>
+                    </div>
+                </div>
             </div>
 
-          </div>
-        )}
-      </main>
+        </section>
 
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up {
-          animation: fadeInUp 0.4s ease-out forwards;
-        }
-      `}} />
-    </div>
-  );
-}
+        <!-- ================= LAB SECRET CODES TAB ================= -->
+        <section id="panel-labs" class="hidden space-y-6">
+            
+            <div class="bg-indigo-900 text-white rounded-3xl p-6 shadow-xl relative overflow-hidden">
+                <div class="absolute right-0 bottom-0 opacity-15">
+                    <svg width="150" height="150" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-1">Your Body's Engine Status</h3>
+                <p class="text-xs text-indigo-200 leading-relaxed">Let's translate Maria's real laboratory reports from May 2026 into fun "Engine Systems"!</p>
+            </div>
 
-// Reusable component for Lab Results Cards
-function LabCard({ title, icon, status, statusColor, summary, children, isExpanded, onToggle }) {
-  return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden transition-all duration-300 hover:shadow-md">
-      <div 
-        className="p-5 cursor-pointer flex items-center justify-between select-none"
-        onClick={onToggle}
-      >
-        <div className="flex items-center gap-4">
-          <div className="bg-slate-50 p-3 rounded-full shadow-inner">
-            {icon}
-          </div>
-          <div>
-            <h2 className="font-bold text-lg text-slate-800">{title}</h2>
-            <p className="text-sm text-slate-500 mt-0.5 line-clamp-1">{summary}</p>
-          </div>
+            <!-- Lab Module 1: Blood Delivery Trucks -->
+            <div class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 space-y-4">
+                <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-red-50 p-2.5 rounded-full text-2xl">🚚</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-base">Oxygen Delivery Fleet</h4>
+                            <p class="text-xs text-slate-500">How your blood cells look</p>
+                        </div>
+                    </div>
+                    <span class="bg-purple-100 text-purple-700 font-bold text-xs px-2.5 py-1 rounded-full">Mini-Truck Blueprint</span>
+                </div>
+
+                <!-- Custom Graphic: Standard Trucks vs Maria's Trucks -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-4">
+                    <div class="space-y-1">
+                        <div class="text-xs font-bold text-slate-400">STANDARD BODY ENGINE:</div>
+                        <div class="flex items-center gap-2">
+                            <!-- Standard Red Cell Truck Cartoon -->
+                            <div class="flex gap-1.5 items-center bg-white border border-slate-200 py-1 px-2.5 rounded-lg text-xs font-bold">
+                                <span>🚚🔴 Normal Size Trucks (MCV 80-100)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <div class="text-xs font-bold text-sky-600">MARIA'S SPECIAL FLEET:</div>
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="flex gap-1.5 items-center bg-emerald-50 border border-emerald-100 py-1 px-2.5 rounded-lg text-xs font-bold text-emerald-800">
+                                <span>⚡ Extra Tiny Delivery Trucks (MCV 67.8)</span>
+                            </div>
+                            <div class="flex gap-1.5 items-center bg-sky-50 border border-sky-100 py-1 px-2.5 rounded-lg text-xs font-bold text-sky-800">
+                                <span>📦 Extra Large Fleet Size! (RBC 5.74)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Details Toggle -->
+                <div class="text-xs text-slate-600 leading-relaxed bg-indigo-50/50 p-3.5 rounded-xl border border-indigo-100">
+                    <p class="font-bold text-indigo-900 mb-1">💡 What does this secret code mean?</p>
+                    <p>Maria's bone marrow makes an abundant supply of red blood cells, but they are uniquely miniature (microcytic). Because her iron tanks are totally full, this represents the natural <strong>Alpha Thalassemia Trait</strong>. It's simply her genetic recipe for red blood cells—perfectly safe and healthy!</p>
+                </div>
+
+                <!-- Clinical Value Dashboard for Mom (Only visible in Mom Mode) -->
+                <div class="mom-clinical-box hidden bg-indigo-900 text-indigo-100 p-4 rounded-xl space-y-2 text-xs transition-all">
+                    <div class="font-bold border-b border-indigo-700 pb-1 text-amber-300">👩‍⚕️ Doctor's Corner (Real Data)</div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div><strong>RBC Count:</strong> <span class="text-white">5.74 x10¹²/L</span> (High)</div>
+                        <div><strong>Hemoglobin:</strong> <span class="text-white">11.6 g/dL</span> (Borderline Low)</div>
+                        <div><strong>MCV (Cell Size):</strong> <span class="text-white">67.8 fL</span> (Low)</div>
+                        <div><strong>Ferritin (Iron Store):</strong> <span class="text-white">28.04 ng/mL</span> (Healthy/Normal)</div>
+                    </div>
+                    <p class="text-[11px] text-indigo-300 italic pt-1 border-t border-indigo-800">Mentzer Index = 67.8 / 5.74 = 11.8 (Values under 13 highly indicate Thalassemia Trait rather than iron deficiency. Electrohoresis ruled out Beta Trait, confirming likely Alpha Trait).</p>
+                </div>
+            </div>
+
+            <!-- Lab Module 2: Sunshine Battery -->
+            <div class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 space-y-4">
+                <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-amber-50 p-2.5 rounded-full text-2xl">🔋</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-base">The Sunshine Battery</h4>
+                            <p class="text-xs text-slate-500">Your body's Vitamin D tank</p>
+                        </div>
+                    </div>
+                    <span class="bg-amber-100 text-amber-700 font-bold text-xs px-2.5 py-1 rounded-full">Needs Sunshine Recharging</span>
+                </div>
+
+                <!-- Custom Visual Battery Gauge -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-3">
+                    <div class="flex justify-between text-xs font-bold text-slate-400">
+                        <span>Empty Tank (0)</span>
+                        <span class="text-amber-600 font-extrabold">Maria's Battery: 19.3</span>
+                        <span>Full Tank (100)</span>
+                    </div>
+                    
+                    <div class="relative w-full bg-slate-200 h-8 rounded-xl overflow-hidden border-2 border-white shadow-inner flex items-center">
+                        <div class="bg-gradient-to-r from-red-400 to-amber-400 h-full rounded-r-lg" style="width: 25%"></div>
+                        <!-- Target threshold marker at 30 -->
+                        <div class="absolute left-[40%] top-0 bottom-0 border-l-2 border-slate-700 border-dashed flex items-center">
+                            <span class="text-[9px] bg-slate-700 text-white font-bold px-1 rounded -ml-4 mt-8">Healthy Target Limit (30)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-xs text-slate-600 leading-relaxed bg-amber-50/50 p-3.5 rounded-xl border border-amber-100">
+                    <p class="font-bold text-amber-900 mb-1">🔋 Recharge Mission:</p>
+                    <p>Maria's battery is at <strong>19.3</strong>, which is just slightly low. To get it past the <strong>30</strong> goal line, simple daily outdoor play (sunlight) and healthy Vitamin D food items will recharge her completely!</p>
+                </div>
+
+                <!-- Clinical Value Dashboard for Mom (Only visible in Mom Mode) -->
+                <div class="mom-clinical-box hidden bg-indigo-900 text-indigo-100 p-4 rounded-xl space-y-2 text-xs transition-all">
+                    <div class="font-bold border-b border-indigo-700 pb-1 text-amber-300">👩‍⚕️ Doctor's Corner (Real Data)</div>
+                    <div><strong>25-OH Vitamin D:</strong> <span class="text-white">19.30 ng/mL</span></div>
+                    <div><strong>Interpretation:</strong> Insufficiency range (defined as 10 to 30 ng/mL). Ideal pediatric target is &gt;30 ng/mL to maintain optimal skeletal mineralization and robust bone health.</div>
+                </div>
+            </div>
+
+            <!-- Lab Module 3: Central Core Engine -->
+            <div class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 space-y-4">
+                <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-emerald-50 p-2.5 rounded-full text-2xl">🛡️</div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-base">The Core Engine Room</h4>
+                            <p class="text-xs text-slate-500">Liver, Kidney, Thyroid & Sugars</p>
+                        </div>
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-700 font-bold text-xs px-2.5 py-1 rounded-full">Perfect Health Status</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-center">
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="text-xs text-slate-400 font-bold">BLOOD SUGAR</div>
+                        <div class="text-emerald-600 font-extrabold text-base">🍭 Super Normal</div>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="text-xs text-slate-400 font-bold">THYROID</div>
+                        <div class="text-emerald-600 font-extrabold text-base">🦋 Fully Balanced</div>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="text-xs text-slate-400 font-bold">LIVER & KIDNEYS</div>
+                        <div class="text-emerald-600 font-extrabold text-base">💧 Clean & Strong</div>
+                    </div>
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="text-xs text-slate-400 font-bold">DEFENSE SYSTEM</div>
+                        <div class="text-emerald-600 font-extrabold text-base">🛡️ Zero Flues</div>
+                    </div>
+                </div>
+
+                <!-- Clinical Value Dashboard for Mom (Only visible in Mom Mode) -->
+                <div class="mom-clinical-box hidden bg-indigo-900 text-indigo-100 p-4 rounded-xl space-y-2 text-xs transition-all">
+                    <div class="font-bold border-b border-indigo-700 pb-1 text-amber-300">👩‍⚕️ Doctor's Corner (Real Data)</div>
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <div><strong>HbA1c:</strong> <span class="text-white">5.5%</span> (Optimal)</div>
+                        <div><strong>TSH:</strong> <span class="text-white">0.97 µIU/mL</span> (Healthy)</div>
+                        <div><strong>ALT / AST:</strong> <span class="text-white">9 / 23 U/L</span> (Excellent)</div>
+                        <div><strong>CRP (Inflammation):</strong> <span class="text-white">0.08 mg/dL</span> (Safe)</div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= SUPERFOODS TAB ================= -->
+        <section id="panel-foods" class="hidden space-y-6">
+            
+            <div class="bg-emerald-600 text-white rounded-3xl p-6 shadow-xl space-y-2">
+                <h3 class="text-xl font-bold">🥑 Superpower Kitchen</h3>
+                <p class="text-xs text-emerald-100 leading-relaxed">Let's find the specific fuel cells that will recharge Maria's blood cells and sunshine battery!</p>
+            </div>
+
+            <!-- Vitamin D Boosters -->
+            <div class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 space-y-4">
+                <h4 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+                    <span>🍳</span> Sunshine Battery Rechargers
+                </h4>
+                <p class="text-xs text-slate-500">Since Maria's Vitamin D needs a little boost, load up her breakfast and dinner plates with these foods!</p>
+
+                <div class="grid grid-cols-1 gap-3">
+                    <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="text-3xl">🥚</div>
+                        <div>
+                            <h5 class="font-bold text-slate-700 text-sm">Sunbaked Egg Yolks</h5>
+                            <p class="text-xs text-slate-500">The yellow core is packed with pure Vitamin D magic.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="text-3xl">🐟</div>
+                        <div>
+                            <h5 class="font-bold text-slate-700 text-sm">Ocean Salmon & Seafood</h5>
+                            <p class="text-xs text-slate-500">Rich in healthy omega fats and amazing calcium supporters.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="text-3xl">🥛</div>
+                        <div>
+                            <h5 class="font-bold text-slate-700 text-sm">Fortified Milk & Yogurt</h5>
+                            <p class="text-xs text-slate-500">Enhanced directly with Vitamin D to support bone growth.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Folate / Blood Builders -->
+            <div class="bg-white rounded-2xl p-5 shadow-md border border-slate-100 space-y-4">
+                <h4 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+                    <span>🥬</span> Blood Factory Support Fuel
+                </h4>
+                <p class="text-xs text-slate-500">Because Maria has the Alpha Thalassemia trait, her delivery trucks are tiny but she has <strong>many</strong> of them. To help her body construct these cells daily, she needs <strong>Folate & Vitamins</strong> (not heavy iron supplements)!</p>
+
+                <div class="grid grid-cols-1 gap-3">
+                    <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="text-3xl">🥑</div>
+                        <div>
+                            <h5 class="font-bold text-slate-700 text-sm">Creamy Avocado & Folate Greens</h5>
+                            <p class="text-xs text-slate-500">Folate is the natural building material for your tiny blood trucks.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="text-3xl">🥜</div>
+                        <div>
+                            <h5 class="font-bold text-slate-700 text-sm">Crunchy Almonds & Seeds</h5>
+                            <p class="text-xs text-slate-500">Natural shield elements that keep cells durable and flexible.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <div class="text-3xl">🍓</div>
+                        <div>
+                            <h5 class="font-bold text-slate-700 text-sm">Juicy Strawberries & Citrus</h5>
+                            <p class="text-xs text-slate-500">Vitamin C acts like a magnet, pulling nutrients smoothly into your body!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Interactive Custom Success Popup Modal -->
+    <div id="success-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl p-6 text-center shadow-2xl border-2 border-amber-300 max-w-xs w-full animate-bounce-gentle">
+            <span class="text-5xl">👑</span>
+            <h3 class="text-2xl font-bold text-slate-800 mt-4">Champion Status!</h3>
+            <p class="text-xs text-slate-500 mt-2">Maria, you completely completed your healthy quests today! Sunny is wearing his coolest sunglasses!</p>
+            <button onclick="closeModal()" class="mt-6 w-full py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-2xl shadow-md">
+                Awesome!
+            </button>
         </div>
-        <div className="flex items-center gap-3">
-          <span className={`text-xs font-bold px-3 py-1 rounded-full ${statusColor} hidden sm:block`}>
-            {status}
-          </span>
-          {isExpanded ? <ChevronUp className="text-slate-400" /> : <ChevronDown className="text-slate-400" />}
-        </div>
-      </div>
-      
-      {/* Expandable Content */}
-      <div 
-        className={`px-5 overflow-hidden transition-all duration-300 ease-in-out bg-slate-50/50 ${isExpanded ? 'max-h-96 pb-5 border-t border-slate-100 opacity-100' : 'max-h-0 opacity-0'}`}
-      >
-        {children}
-      </div>
     </div>
-  );
-}
 
-// Reusable component for Food Items
-function FoodItem({ icon, name, desc }) {
-  return (
-    <li className="flex items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
-      <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white rounded-lg shadow-sm">
-        {icon}
-      </div>
-      <div>
-        <p className="font-bold text-slate-700 text-sm">{name}</p>
-        <p className="text-xs text-slate-500">{desc}</p>
-      </div>
-    </li>
-  );
-}
+    <!-- Interactive Javascript Logic -->
+    <script>
+        // Quest completion states
+        const quests = {
+            'quest-sun': false,
+            'quest-move': false,
+            'quest-superfood': false,
+            'quest-water': false
+        };
 
+        // Tab Switching Engine
+        function switchTab(tabId) {
+            // Hide all panels
+            document.getElementById('panel-adventure').classList.add('hidden');
+            document.getElementById('panel-labs').classList.add('hidden');
+            document.getElementById('panel-foods').classList.add('hidden');
 
-```
+            // Deactivate all tab styles
+            const tabs = ['adventure', 'labs', 'foods'];
+            tabs.forEach(id => {
+                const tabEl = document.getElementById(`tab-${id}`);
+                tabEl.classList.remove('bg-sky-500', 'text-white', 'shadow-sm');
+                tabEl.classList.add('text-slate-600', 'hover:bg-sky-50');
+            });
+
+            // Show active panel
+            document.getElementById(`panel-${tabId}`).classList.remove('hidden');
+
+            // Activate active tab style
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            activeTab.classList.remove('text-slate-600', 'hover:bg-sky-50');
+            activeTab.classList.add('bg-sky-500', 'text-white', 'shadow-sm');
+        }
+
+        // Toggle Quest Functionality
+        function toggleQuest(questId) {
+            quests[questId] = !quests[questId];
+            
+            // Toggle check box design
+            const chk = document.getElementById(`chk-${questId}`);
+            if (quests[questId]) {
+                chk.innerHTML = "✅";
+                chk.classList.remove('border-slate-300');
+                chk.classList.add('border-emerald-500');
+            } else {
+                chk.innerHTML = "";
+                chk.classList.remove('border-emerald-500');
+                chk.classList.add('border-slate-300');
+            }
+
+            calculateProgress();
+        }
+
+        // Progress Calculator
+        function calculateProgress() {
+            const completedCount = Object.values(quests).filter(val => val === true).length;
+            const totalQuests = Object.keys(quests).length;
+            
+            // Calculate percentage (keep default 5% to look nice)
+            const percentage = Math.max(5, (completedCount / totalQuests) * 100);
+            
+            // Update UI elements
+            document.getElementById('adventure-progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-percent').innerText = `${Math.round(percentage)}% Charged`;
+
+            // Mascot faces state updating
+            const faceSleepy = document.getElementById('face-sleepy');
+            const faceHappy = document.getElementById('face-happy');
+            const faceCool = document.getElementById('face-cool');
+            const speechText = document.getElementById('mascot-speech');
+
+            if (percentage < 25) {
+                faceSleepy.classList.remove('hidden');
+                faceHappy.classList.add('hidden');
+                faceCool.classList.add('hidden');
+                speechText.innerText = '"Yawn... I need your healthy superpower energy to wake up!"';
+            } else if (percentage >= 25 && percentage < 100) {
+                faceSleepy.classList.add('hidden');
+                faceHappy.classList.remove('hidden');
+                faceCool.classList.add('hidden');
+                speechText.innerText = '"Aww, thank you! I can feel the energy charging!"';
+            } else if (percentage === 100) {
+                faceSleepy.classList.add('hidden');
+                faceHappy.classList.add('hidden');
+                faceCool.classList.remove('hidden');
+                speechText.innerText = '"Wow! 100% full battery! You are awesome, Maria!"';
+                
+                // Show celebration popup
+                setTimeout(() => {
+                    document.getElementById('success-modal').classList.remove('hidden');
+                }, 400);
+            }
+        }
+
+        // Sun Mascot interactive click trigger
+        function tickleSun() {
+            const speechText = document.getElementById('mascot-speech');
+            speechText.innerText = '"Hehehe, that tickles! Keep up the daily adventures!"';
+            setTimeout(() => {
+                calculateProgress(); // Reset speech to baseline state
+            }, 3000);
+        }
+
+        // Mother's Clinical mode Toggle
+        let momModeActive = false;
+        function toggleMomMode() {
+            momModeActive = !momModeActive;
+            const btn = document.getElementById('mom-mode-btn');
+            const statusLabel = document.getElementById('mom-mode-status');
+            const boxes = document.querySelectorAll('.mom-clinical-box');
+
+            if (momModeActive) {
+                btn.classList.remove('bg-indigo-100', 'text-indigo-700');
+                btn.classList.add('bg-indigo-600', 'text-white');
+                statusLabel.innerText = "ON";
+                boxes.forEach(box => box.classList.remove('hidden'));
+            } else {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('bg-indigo-100', 'text-indigo-700');
+                statusLabel.innerText = "OFF";
+                boxes.forEach(box => box.classList.add('hidden'));
+            }
+        }
+
+        // Close celebration modal
+        function closeModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
+
